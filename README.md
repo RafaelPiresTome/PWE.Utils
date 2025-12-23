@@ -40,9 +40,23 @@ Set-yaml -yaml $h -path "/path/to/file.yaml"
 # Services
 Here are some usefull functions to manage services :
 ``` powershell
-# To get yaml file
-$h = Get-yaml -Path "/path/to/file.yaml"
-$h = Get-yaml -Path "https://server.domain/path/to/file.yaml"
-# To set yaml file
-Set-yaml -yaml $h -path "/path/to/file.yaml"
+# To get service
+Get-PWEService -Name "ssh*"
+# To stop service
+Stop-PWEService -Name "ssh*"
+# To restart service
+Restart-PWEService -Name "ssh*"
+# To start service
+Start-PWEService -Name "ssh*"
+```
+
+# Firewall
+Here are some usefull functions to manage firewall rules :
+``` powershell
+# To add firewall rule
+New-FirewallRule -Name "Restrict_HTTP" -Port 80 -RemoteAddress 123.456.789.0/24
+# To get firewall rule
+Get-FirewallRule -Name "Restrict_HTTP
+# To remove firewall rule
+Remove-FirewallRule -Name "Restrict_HTTP
 ```
