@@ -45,7 +45,7 @@ function Invoke-HostMetrics {
                 Resource    = 'CPU'
                 Timestamp   = NowIso
                 cpu_percent = [math]::Round($perf.PercentProcessorTime, 2)
-                core_count  = $cpu.NumberOfCores
+                core_count  = $cpu.NumberOfCores | Measure-Object -Sum | select -expand sum
             }
         } else {
             $usage = (grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage}')
