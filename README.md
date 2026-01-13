@@ -60,3 +60,26 @@ Get-FirewallRule -Name "Restrict_HTTP
 # To remove firewall rule
 Remove-FirewallRule -Name "Restrict_HTTP
 ```
+
+# Logs
+Here are some usefull functions to manage logs :
+``` powershell
+# To set path for log files
+Set-PWELogPath -Path /logs
+# To write a log file
+Write-PWELog -Name "File_Name" -Level DEBUG -String "This is a debug line" -PSHost
+Write-PWELog -Name "File_Name" -Level INFO -String "This is an info line" -PSHost
+Write-PWELog -Name "File_Name" -Level WARN -String "This is a warning line" -PSHost
+Write-PWELog -Name "File_Name" -Level ERROR -String "This is an error line" -PSHost
+Write-PWELog -Name "File_Name" -Level TRACE -String "This is a trace line" -PSHost
+Write-PWELog -Name "File_Name" -Level fatal -String "This is a fatal line" -PSHost
+# To get a log file
+Get-PWELog -Name "File_Name"
+# To get the list of all log files within the setted path
+Get-PWELogList
+# To delete a log file
+Clear--PWELog -Name "File_Name"
+# To save logs with timestamp
+Invoke-PWELogSave
+```
+
