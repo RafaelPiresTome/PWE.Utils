@@ -83,3 +83,17 @@ Clear--PWELog -Name "File_Name"
 Invoke-PWELogSave
 ```
 
+# Hostmetrics
+Here are some usefull functions to git hostmetrics :
+``` powershell
+# To get hostmetrics within the console (only with separate commands)
+Invoke-HostMetrics -CPU
+Invoke-HostMetrics -RAM
+Invoke-HostMetrics -Disk
+Invoke-HostMetrics -GPU
+Invoke-HostMetrics -Network
+# To get hostmetrics within a csv file
+Invoke-HostMetrics -CPU -RAM -Disk -GPU -Network -CsvPath "/tmp/file.csv"
+# To get hostmetrics continuously
+Invoke-HostMetrics -CPU -RAM -Disk -GPU -Network -CsvPath "/tmp/file.csv" -Continuous -Interval 10
+```
