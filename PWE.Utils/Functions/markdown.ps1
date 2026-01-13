@@ -57,10 +57,8 @@ Function Convert-MarkdownDirectoryToHtml {
 	foreach($f in $files){
 		if($Links){
 			Convert-MarkdownToHtmlFile -Path "$($f.FullName)" -FilePath "$($f.FullName).html" -Links
-			write-output "with link"
 		}else{
 			Convert-MarkdownToHtmlFile -Path "$($f.FullName)" -FilePath "$($f.FullName).html"
-			write-output "without link ..."
 		}
 	}
 }
