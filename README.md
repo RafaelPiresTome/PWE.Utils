@@ -72,7 +72,10 @@ Write-PWELog -Name "File_Name" -Level INFO -String "This is an info line" -PSHos
 Write-PWELog -Name "File_Name" -Level WARN -String "This is a warning line" -PSHost
 Write-PWELog -Name "File_Name" -Level ERROR -String "This is an error line" -PSHost
 Write-PWELog -Name "File_Name" -Level TRACE -String "This is a trace line" -PSHost
-Write-PWELog -Name "File_Name" -Level fatal -String "This is a fatal line" -PSHost
+Write-PWELog -Name "File_Name" -Level FATAL -String "This is a fatal line" -PSHost
+# To write a script or function output into a log file
+. /pat/to/script | Out-PWELog -Name "File_Name" -Level INFO -PSHost
+invoke-function | Out-PWELog -Name "File_Name" -Level INFO -PSHost
 # To get a log file
 Get-PWELog -Name "File_Name"
 # To get the list of all log files within the setted path
@@ -96,4 +99,65 @@ Invoke-HostMetrics -Network
 Invoke-HostMetrics -CPU -RAM -Disk -GPU -Network -CsvPath "/tmp/file.csv"
 # To get hostmetrics continuously
 Invoke-HostMetrics -CPU -RAM -Disk -GPU -Network -CsvPath "/tmp/file.csv" -Continuous -Interval 10
+```
+
+# Modifying file 
+Here is a provided function to modify files : 
+``` powershell
+# To replace a Regex String
+Invoke-PWEFiler -Path "C:\My\file.txt" -String "MyRegexToReplace" -Replace "NewValue"
+# To replace the full line 
+Invoke-PWEFiler -Path "C:\My\file.txt" -String "MyRegexToReplace" -Replace "NewValue" -Line
+```
+To massively replace a file : 
+``` powershell
+# To replace a Regex String
+Invoke-PWEBulkFiler -Path "C:\My\file.txt" -PSObject @(
+  @{ String="FirstRegexToReplace"; Replace="NewValue"},
+  @{ String="SecondRegexToReplaceFullLine"; Replace="NewValue"; Line=$True}
+)
+```
+
+# Hashtable Keys
+Here are some usefull functions to manipulate Hashtable Keys : 
+``` powershell
+# To get hashtable keys : 
+$h | Get-HashtableKey
+$h | Get-HashtableKey -Recurse
+$h | Get-HashtableKey -Recurse -Separator /
+$h | Get-HashtableKey -Recurse -Separator / -AsObject
+$h | Get-HashtableKey -Recurse -Separator / -AsObject -IncludeArrays
+$h | Get-HashtableKey -Recurse -Separator / -AsObject -IncludeArrays -Filter *child22*
+# To get hostmetrics within a csv file
+$h | Test-HashtableKey -Key child1
+$h | Test-HashtableKey -Key child1.child12 -Recurse
+$h | Test-HashtableKey -Match child12 -Recurse
+```
+
+# Passwords
+You can use the following function to generate random passwords : 
+``` powershell
+# To have a sample of authorized character to use :
+$authorized =  Get-AuthorizedCharactersSample
+# To Generate a new random password : 
+New-GeneratedPassword
+New-GeneratedPassword -Length 8
+New-GeneratedPassword -AuthorizedCharacters $authorized
+New-GeneratedPassword -AsSecureString
+```
+
+# Markdowns
+You can use the following function to generate random passwords : 
+``` powershell
+# To convert a simple file markdown into an HTML file
+Convert-MarkdownToHtmlFile -Path "/path/to/file.md" # To create "/path/to/file.md.html" output file
+Convert-MarkdownToHtmlFile -Path "/path/to/file.md" -FilePath "/another/path/to/name.html" # To create custom output file
+Convert-MarkdownToHtmlFile -Path "/path/to/file.md" -Show # To show html file after generation into default browser
+Convert-MarkdownToHtmlFile -Path "/path/to/file.md" -Links # To change links to other markdown files
+# To generate html files from markdown files from an entire Directory : 
+Convert-MarkdownDirectoryToHtml -Path "/directory/path"
+Convert-MarkdownDirectoryToHtml -Path "/directory/path" -Links
+# To convert main markdown file from a module :
+New-ModuleMarkdown -Name "ModuleName"
+New-ModuleMarkdown -Name "ModuleName" -Show $True
 ```
