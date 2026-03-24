@@ -16,7 +16,7 @@ Function Write-PWELog {
 	[ValidateSet('DEBUG','INFO','WARN','ERROR','TRACE','FATAL')]
 	[String]$Level,
 	[Parameter(Position=2, ValueFromPipeline=$true)]
-	[String]$String,
+	[String[]]$String,
 	[Switch]$PSHost
 	)
 	
@@ -37,6 +37,44 @@ Function Write-PWELog {
 	
 	$msg | out-file "$($global:PWE_LOG_PATH)/$($Name).log" -encoding default -append
 	
+}
+
+Function Out-PWELog {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position=0)]
+        [String]$Name,
+
+        [Parameter(Mandatory, Position=1)]
+        [ValidateSet('DEBUG','INFO','WARN','ERROR','TRACE','FATAL')]
+        [String]$Level,
+
+        [Parameter(ValueFromPipeline = $true)]
+        [PSObject]$InputObject,
+
+        [Switch]$PSHost
+    )
+
+    process {
+        if ($null -ne $InputObject) {
+
+            # Convert properly to string (handles objects, tables, etc.)
+            $lines = $InputObject | Out-String -Stream
+
+            foreach ($line in $lines) {
+                if (-not [string]::IsNullOrWhiteSpace($line)) {
+
+                    if ($PSHost) {
+                        Write-PWELog -Name $Name -Level $Level -String $line -PSHost
+                    }
+                    else {
+                        Write-PWELog -Name $Name -Level $Level -String $line
+                    }
+
+                }
+            }
+        }
+    }
 }
 
 Function Get-PWELog {
@@ -64,7 +102,7 @@ Function Clear-PWELog {
 }
 
 Function Get-PWELogList {
-	return (get-childitem "$($global:PWE_LOG_PATH)/$($Name).log" -File | where {$_.Name -notmatch ".zip$"}).Name.replace(".log","")
+	return (get-childitem "$($global:PWE_LOG_PATH)" -File | where {$_.Name -notmatch ".zip$"}).Name.replace(".log","")
 }
 
 Function Invoke-PWELogSave {

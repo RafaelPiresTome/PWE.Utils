@@ -53,8 +53,8 @@ class PWECredential {
 		if(!(test-path "$FilePath" )){
 			New-item -Path "$FilePath" -ItemType File | out-null
 		}
-		$y = get-yaml -path $FilePath
-		$y += @(h)
+		$y = @(get-yaml -path $FilePath)
+		$y += @($h)
 		set-yaml -yaml $y -path $FilePath
 	}
 	[Void]Save([String]$FilePath,[String]$KeyFilePath){
@@ -64,21 +64,25 @@ class PWECredential {
 		if(!(test-path "$FilePath" )){
 			New-item -Path "$FilePath" -ItemType File | out-null
 		}
-		$y = get-yaml -path $FilePath
-		$y += @(h)
+		$y = @(get-yaml -path $FilePath)
+		$y += @($h)
 		set-yaml -yaml $y -path $FilePath
 	}
 }
 
 class PWECredentialVault{
+	[String]$Name
 	[PWECredential[]]$PWECredential
-	PWECredentialVault(){
+	PWECredentialVault([String]$Name){
+		$this.Name = $Name
 		$this.PWECredential = @()
 	}
-	PWECredentialVault([String]$Path){
+	PWECredentialVault([String]$Name,[String]$Path){
+		$this.Name = $Name
 		$this.import("$Path")
 	}
-	PWECredentialVault([String]$Path,[String]$KeyFilePath){
+	PWECredentialVault([String]$Name,[String]$Path,[String]$KeyFilePath){
+		$this.Name = $Name
 		$this.import("$Path","$KeyFilePath")
 	}
 	[void]import([String]$Path){
@@ -128,14 +132,14 @@ class PWECredentialVault{
 		$ArrayList.remove($PWECredential)
 		$this.PWECredential = $ArrayList
 	}
-	[void]save([String]$FilePath){
+	[void]save([String]$Path){
 		foreach($cred in $this.PWECredential){
-			$cred.save("$FilePath")
+			$cred.save("$($Path)/$($this.name).vault")
 		}
 	}
-	[void]save([String]$FilePath,[String]$KeyFilePath){
+	[void]save([String]$Path,[String]$KeyFilePath){
 		foreach($cred in $this.PWECredential){
-			$cred.save("$FilePath",$KeyFilePath)
+			$cred.save("$($Path)/$($this.name).vault",$KeyFilePath)
 		}
 	}
 }
