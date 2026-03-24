@@ -146,6 +146,17 @@ New-GeneratedPassword -AuthorizedCharacters $authorized
 New-GeneratedPassword -AsSecureString
 ```
 
+# Keys
+To create new keys for password encryption :  
+``` powershell
+# To generate a new key :
+$key = New-PWEKey
+New-PWEKey -FilePath "/path/to/mykey.key"
+# To generate a new secure key :
+$SecureKey = New-PWESecureKey -Key $Key
+$SecureKey = New-PWESecureKey -FilePath "/path/to/mykey.key"
+```
+
 # Markdowns
 You can use the following function to generate random passwords : 
 ``` powershell
