@@ -170,5 +170,5 @@ Convert-MarkdownDirectoryToHtml -Path "/directory/path"
 Convert-MarkdownDirectoryToHtml -Path "/directory/path" -Links
 # To convert main markdown file from a module :
 New-ModuleMarkdown -Name "ModuleName"
-New-ModuleMarkdown -Name "ModuleName" -Show $True
+New-ModuleMarkdown -Name "ModuleName" -Show
 ```
