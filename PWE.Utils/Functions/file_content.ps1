@@ -1,4 +1,4 @@
-function Get-Yaml {
+function Get-FileContent {
 
     param(
         [String]$Path,
@@ -16,27 +16,23 @@ function Get-Yaml {
         $raw = Unprotect-PWEText -EncryptedText $raw.Trim() -KeyBytes $keyBytes
     }
 
-    $h = convertfrom-yaml $raw
-
-    return $h
+    return $raw
 
 }
 
-function Set-Yaml {
+function Set-FileContent {
 
     param(
-        [PSObject]$Yaml,
+        [String]$Content,
         [String]$Path,
         [Object]$Key   # optional: byte[] key, path to a New-PWEKey file, or New-PWEKey char[] output
     )
 
-    $yamlText = convertto-yaml $Yaml
-
     if ($Key) {
         $keyBytes = ConvertTo-PWEAesKeyBytes -Key $Key
-        $yamlText = Protect-PWEText -Text $yamlText -KeyBytes $keyBytes
+        $Content = Protect-PWEText -Text $Content -KeyBytes $keyBytes
     }
 
-    $yamlText | out-file "$Path" -encoding default -Force
+    $Content | out-file "$Path" -encoding default -Force
 
 }
